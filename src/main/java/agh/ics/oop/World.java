@@ -1,20 +1,38 @@
 package agh.ics.oop;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class World
 {
     public static void main(String[] args)
     {
-        Vector2d position1 = new Vector2d(1,2);
-        System.out.println(position1);
-        Vector2d position2 = new Vector2d(-2,1);
-        System.out.println(position2);
-        System.out.println(position1.add(position2));
-        System.out.println(MapDirection.WEST.next());
-        System.out.println(MapDirection.NORTH.prev());
-        System.out.println(MapDirection.SOUTH);
-        System.out.println(MapDirection.EAST.toUnitVector());
+        OptionsParser cpu = new OptionsParser();
+        MoveDirection[] polecenia = cpu.parse(args);
+        //System.out.println(Arrays.toString(args));
+        //System.out.println(Arrays.toString(polecenia));
+        Animal zwierz = new Animal();
+        System.out.println(zwierz);
+        for (MoveDirection x: polecenia)
+            zwierz.move(x);
+        System.out.println(zwierz);
+
+        /*
+        Animal zwierz = new Animal();
+        System.out.println(zwierz);
+        zwierz.move(MoveDirection.RIGHT);
+        zwierz.move(MoveDirection.FORWARD);
+        zwierz.move(MoveDirection.FORWARD);
+        zwierz.move(MoveDirection.FORWARD);
+        System.out.println(zwierz);
+        String[] tab = new String[3];
+        tab[0] = "r";
+        tab[1] = "b";
+        tab[2] = "c";
+        OptionsParser nwm = new OptionsParser();
+        System.out.println(Arrays.toString(nwm.parse(tab)));
+        */
+
     }
 
 }
