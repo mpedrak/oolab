@@ -15,6 +15,7 @@ public class World
         System.out.println(MapDirection.NORTH.prev());
         System.out.println(MapDirection.SOUTH);
         System.out.println(MapDirection.EAST.toUnitVector());
+
     }
 
 }
