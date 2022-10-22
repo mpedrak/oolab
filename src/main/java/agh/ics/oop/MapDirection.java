@@ -15,6 +15,17 @@ public enum MapDirection
         }
         return "";
     }
+    public String toShortString() // do wypisania krotkiego
+    {
+        switch(this)
+        {
+            case NORTH: return "^";
+            case SOUTH: return "v";
+            case WEST: return "<";
+            case EAST: return ">";
+        }
+        return "";
+    }
     public MapDirection next()
     {
         MapDirection[] tab = values();
