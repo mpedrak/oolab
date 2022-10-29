@@ -10,7 +10,7 @@ public class Animal
 
     public String toString()
     {
-        return position.toString() + ", " + orientation.toShortString();
+        return orientation.toShortString();
     }
 
     public Animal()
@@ -43,6 +43,10 @@ public class Animal
         return false;
     }
 
+    public Vector2d getPosition() // do RectangularMap
+    {
+        return position;
+    }
     public void move(MoveDirection direction)
     {
         if (direction.equals(MoveDirection.RIGHT))
@@ -57,6 +61,7 @@ public class Animal
         if (map.canMoveTo(new_pos))
             position = new_pos;
     }
+
     public boolean equals(Object other)
     {
         if (this == other)

@@ -7,32 +7,16 @@ public class World
 {
     public static void main(String[] args)
     {
-        OptionsParser cpu = new OptionsParser();
-        MoveDirection[] polecenia = cpu.parse(args);
-        //System.out.println(Arrays.toString(args));
-        //System.out.println(Arrays.toString(polecenia));
-        Animal zwierz = new Animal();
-        System.out.println(zwierz);
-        for (MoveDirection x: polecenia)
-            zwierz.move(x);
-        System.out.println(zwierz);
-
-        /*
-        Animal zwierz = new Animal();
-        System.out.println(zwierz);
-        zwierz.move(MoveDirection.RIGHT);
-        zwierz.move(MoveDirection.FORWARD);
-        zwierz.move(MoveDirection.FORWARD);
-        zwierz.move(MoveDirection.FORWARD);
-        System.out.println(zwierz);
-        String[] tab = new String[3];
-        tab[0] = "r";
-        tab[1] = "b";
-        tab[2] = "c";
-        OptionsParser nwm = new OptionsParser();
-        System.out.println(Arrays.toString(nwm.parse(tab)));
-        */
-
+        System.out.println(Arrays.toString(args));
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        System.out.println(Arrays.toString(directions));
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        System.out.println("0 - start w (2,2), 1 - start w (3,4)");
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        System.out.println(map);
+        engine.run();
+        System.out.println(map);
     }
 
 }

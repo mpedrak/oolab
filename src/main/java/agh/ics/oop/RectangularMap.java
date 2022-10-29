@@ -6,8 +6,8 @@ public class RectangularMap implements IWorldMap
 {
     private int width;
     private int height;
+    private LinkedList <Animal> zwierzeta = new LinkedList<Animal>();
 
-    private LinkedList<Animal> zwierzeta = new LinkedList<>();
 
     public RectangularMap(int width, int height)
     {
@@ -17,7 +17,7 @@ public class RectangularMap implements IWorldMap
     public String toString()
     {
         MapVisualizer rysownik = new MapVisualizer(this);
-        rysownik.draw(new Vector2d(0, 0), new Vector2d(this.width, this.height));
+        return rysownik.draw(new Vector2d(0, 0), new Vector2d(this.width - 1, this.height - 1));
     }
     /**
      * Indicate if any object can move to the given position.
@@ -28,7 +28,11 @@ public class RectangularMap implements IWorldMap
      */
     public boolean canMoveTo(Vector2d position)
     {
-
+        if (position.follows(new Vector2d(0, 0)) &&
+                position.precedes(new Vector2d(width - 1, height - 1))
+                    && !isOccupied(position))
+            return true;
+        return false;
     }
 
     /**
@@ -40,7 +44,12 @@ public class RectangularMap implements IWorldMap
      */
     public boolean place(Animal animal)
     {
-
+        if (canMoveTo(animal.getPosition()))
+        {
+            zwierzeta.add(animal);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -54,7 +63,9 @@ public class RectangularMap implements IWorldMap
      */
     public boolean isOccupied(Vector2d position)
     {
-
+        if (objectAt(position) == null)
+            return false;
+        return true;
     }
 
     /**
@@ -66,6 +77,11 @@ public class RectangularMap implements IWorldMap
      */
     public Object objectAt(Vector2d position)
     {
-
+        for (Animal x: zwierzeta)
+        {
+            if (x.isAt(position))
+                return x;
+        }
+        return null;
     }
 }
