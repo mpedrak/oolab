@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
-public class AnimalTest
+public class AnimalTest // nieaktualne testy bo zmieniona metoda move
 {
     @Test
     public void animalTest()
