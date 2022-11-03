@@ -2,10 +2,9 @@ package agh.ics.oop;
 
 import java.util.Objects;
 
-public class Animal
+public class Animal extends AbstractWorldMapElement
 {
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d position;;
     private IWorldMap map;
 
     public String toString()
@@ -41,11 +40,6 @@ public class Animal
         if (this.orientation.equals(o))
             return true;
         return false;
-    }
-
-    public Vector2d getPosition() // do RectangularMap
-    {
-        return position;
     }
     public void move(MoveDirection direction)
     {

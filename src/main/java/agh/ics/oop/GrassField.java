@@ -1,62 +1,67 @@
 package agh.ics.oop;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 
-import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
-public class GrassField implements IWorldMap
+public class GrassField extends AbstractWorldMap
 {
-    private LinkedList<Animal> zwierzeta = new LinkedList<Animal>();
-
-    private LinkedList<Grass> zdzbla_trawy = new LinkedList<Grass>();
-
-    private int wymiar_dla_trawy;
-
+    private ArrayList<Grass> trawnik = new ArrayList<Grass>();
+    private int n;
     public GrassField(int n)
     {
-        this.wymiar_dla_trawy = (int)sqrt(n * 10);
-        umiesc_trawe(n);
+        this.n = n;
+        stworzTrawe();
     }
 
-    public String toString()
+    @Override
+    protected Vector2d bottomLeft()
     {
-        MapVisualizer rysownik = new MapVisualizer(this);
+        final int sqrt10n = (int)sqrt(10 * n);
+        Vector2d bottomLeft = new Vector2d(sqrt10n, sqrt10n);
+        for (Animal x: zwierzeta)
+        {
+            bottomLeft = bottomLeft.lowerLeft(x.getPosition());
+        }
+        for (Grass x: trawnik)
+        {
+            bottomLeft = bottomLeft.lowerLeft(x.getPosition());
+        }
+       return bottomLeft;
+    }
+
+    @Override
+    protected Vector2d upperRight()
+    {
         Vector2d upperRight = new Vector2d(0, 0);
         for (Animal x: zwierzeta)
         {
             upperRight = upperRight.upperRight(x.getPosition());
         }
-        for (Grass x: zdzbla_trawy)
+        for (Grass x: trawnik)
         {
             upperRight = upperRight.upperRight(x.getPosition());
         }
-        return rysownik.draw(new Vector2d(0, 0), upperRight);
+        return upperRight;
     }
-    /**
-     * Indicate if any object can move to the given position.
-     *
-     * @param position
-     *            The position checked for the movement possibility.
-     * @return True if the object can move to that position.
-     */
+    @Override
     public boolean canMoveTo(Vector2d position)
     {
-        if (position.follows(new Vector2d(0, 0)) && !isOccupied(position))
+        if(objectAt(position) == null)
             return true;
+        if ((objectAt(position) instanceof Grass))  // do dodatkowego
+        {
+            int i = hasGrass(position);
+            trawnik.remove(i);
+            trawnik.add(i, storzJednaTrawe(position));
+            return true;
+        }
         return false;
     }
-
-
-
-    /**
-     * Place a animal on the map.
-     *
-     * @param animal
-     *            The animal to place on the map.
-     * @return True if the animal was placed. The animal cannot be placed if the map is already occupied.
-     */
+    @Override
     public boolean place(Animal animal)
     {
         if (canMoveTo(animal.getPosition()))
@@ -66,32 +71,7 @@ public class GrassField implements IWorldMap
         }
         return false;
     }
-
-
-    /**
-     * Return true if given position on the map is occupied. Should not be
-     * confused with canMove since there might be empty positions where the animal
-     * cannot move.
-     *
-     * @param position
-     *            Position to check.
-     * @return True if the position is occupied.
-     */
-    public boolean isOccupied(Vector2d position)
-    {
-        if (objectAt(position) == null)
-            return false;
-        return true;
-    }
-
-
-    /**
-     * Return an object at a given position.
-     *
-     * @param position
-     *            The position of the object.
-     * @return Object or null if the position is not occupied.
-     */
+    @Override
     public Object objectAt(Vector2d position)
     {
         for (Animal x: zwierzeta)
@@ -99,48 +79,56 @@ public class GrassField implements IWorldMap
             if (x.isAt(position))
                 return x;
         }
-        for (Grass x: zdzbla_trawy)
+        for (Grass x: trawnik)
         {
             if (x.getPosition().equals(position))
                 return x;
         }
         return null;
     }
-
-    private void umiesc_trawe(int n)
+    private void stworzTrawe()
     {
-        int i = 0;
+        final int sqrt10n = (int)sqrt(10 * n);
         Random generator = new Random();
+        int i = 0;
         while (i < n)
         {
-            Vector2d potencialna_pozycja = new Vector2d(generator.nextInt() % wymiar_dla_trawy,
-                    generator.nextInt() % wymiar_dla_trawy);
-            if (placeGrass(new Grass(potencialna_pozycja)))
+            Vector2d pp = new Vector2d(generator.nextInt() % sqrt10n, generator.nextInt() % sqrt10n);
+            Vector2d zero0 = new Vector2d(0, 0);
+            if (pp.follows(zero0) && objectAt(pp) == null)
+            {
+                trawnik.add(new Grass(pp));
                 i++;
+            }
         }
     }
-    private boolean placeGrass(Grass trawa)
+    private Grass storzJednaTrawe(Vector2d old_p)
     {
-        if (!hasGrass(trawa.getPosition()))
+        final int sqrt10n = (int)sqrt(10 * n);
+        Random generator = new Random();
+        while (true)
         {
-            zdzbla_trawy.add(trawa);
-            return true;
+            Vector2d pp = new Vector2d(generator.nextInt() % sqrt10n, generator.nextInt() % sqrt10n);
+            Vector2d zero0 = new Vector2d(0, 0);
+            if (pp.follows(zero0) && objectAt(pp) == null && !pp.equals(old_p))
+            {
+                return new Grass(pp);
+            }
         }
-        return false;
     }
-    private boolean hasGrass(Vector2d pos)
+    private int hasGrass(Vector2d pos)
     {
-        if (objectAtForGrass(pos) == null)
-            return false;
-        return true;
-    }
-    private Object objectAtForGrass(Vector2d pos)
-    {
-        for (Grass x: zdzbla_trawy)
+        for (int i = 0; i < trawnik.size(); i++)
         {
-            if (x.getPosition().equals(pos))
-                return x;
+            if (trawnik.get(i). getPosition().equals(pos))
+            {
+                return i;
+            }
         }
-        return null;
+        return -1;
+    }
+    public int getAmountOfGrass()
+    {
+        return trawnik.size();
     }
 }
