@@ -34,9 +34,11 @@ public class SimulationEngine implements IEngine
         {
             Animal zwierz = zwierzeta.get(i);
             zwierz.move(x);
+            /*
             System.out.println(i + ", " + x);
             System.out.println(mapa);
             System.out.println("Ilosc trawy: " + ((GrassField)mapa).getAmountOfGrass());
+            */
             i++;
             if (i == zwierzeta.size())
                 i = 0;

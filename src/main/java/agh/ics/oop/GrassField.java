@@ -52,21 +52,11 @@ public class GrassField extends AbstractWorldMap
     {
         if(objectAt(position) == null)
             return true;
-        if ((objectAt(position) instanceof Grass))  // do dodatkowego
+        if ((objectAt(position) instanceof Grass))  // do dodatkowego (zawsze kiedy canMoveTo zwroci true to zwierze sie poruszy)
         {
             int i = hasGrass(position);
             trawnik.remove(i);
             trawnik.add(i, storzJednaTrawe(position));
-            return true;
-        }
-        return false;
-    }
-    @Override
-    public boolean place(Animal animal)
-    {
-        if (canMoveTo(animal.getPosition()))
-        {
-            zwierzeta.add(animal);
             return true;
         }
         return false;
@@ -91,10 +81,10 @@ public class GrassField extends AbstractWorldMap
         final int sqrt10n = (int)sqrt(10 * n);
         Random generator = new Random();
         int i = 0;
+        final Vector2d zero0 = new Vector2d(0, 0);
         while (i < n)
         {
             Vector2d pp = new Vector2d(generator.nextInt() % sqrt10n, generator.nextInt() % sqrt10n);
-            Vector2d zero0 = new Vector2d(0, 0);
             if (pp.follows(zero0) && objectAt(pp) == null)
             {
                 trawnik.add(new Grass(pp));
@@ -106,10 +96,10 @@ public class GrassField extends AbstractWorldMap
     {
         final int sqrt10n = (int)sqrt(10 * n);
         Random generator = new Random();
+        final Vector2d zero0 = new Vector2d(0, 0);
         while (true)
         {
             Vector2d pp = new Vector2d(generator.nextInt() % sqrt10n, generator.nextInt() % sqrt10n);
-            Vector2d zero0 = new Vector2d(0, 0);
             if (pp.follows(zero0) && objectAt(pp) == null && !pp.equals(old_p))
             {
                 return new Grass(pp);
@@ -120,7 +110,7 @@ public class GrassField extends AbstractWorldMap
     {
         for (int i = 0; i < trawnik.size(); i++)
         {
-            if (trawnik.get(i). getPosition().equals(pos))
+            if (trawnik.get(i).getPosition().equals(pos))
             {
                 return i;
             }

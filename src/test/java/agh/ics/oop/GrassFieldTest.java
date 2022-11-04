@@ -26,6 +26,8 @@ public class GrassFieldTest
 
         engine.run();
 
+        assertTrue(((GrassField)map).getAmountOfGrass() == 10);
+
         assertTrue(map.objectAt(new Vector2d(2,-1))instanceof Animal);
         assertTrue(map.objectAt(new Vector2d(3,7))instanceof Animal);
         assertFalse(map.objectAt(new Vector2d(1,2))instanceof Animal);
