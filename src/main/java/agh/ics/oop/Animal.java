@@ -1,10 +1,12 @@
 package agh.ics.oop;
 
+import java.util.LinkedList;
 import java.util.Objects;
 
 public class Animal extends AbstractWorldMapElement
 {
     private MapDirection orientation = MapDirection.NORTH;
+    private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
     private IWorldMap map;
 
     public String toString()
@@ -53,7 +55,10 @@ public class Animal extends AbstractWorldMapElement
         if (direction.equals(MoveDirection.BACKWARD))
             new_pos = new_pos.subtract(orientation.toUnitVector());
         if (map.canMoveTo(new_pos))
+        {
+            positionChanged(position, new_pos);
             position = new_pos;
+        }
     }
 
     public boolean equals(Object other)
@@ -72,5 +77,18 @@ public class Animal extends AbstractWorldMapElement
     public int hashCode()
     {
         return Objects.hash(orientation, position);
+    }
+    public void addObserver(IPositionChangeObserver observer)
+    {
+        obserwatorzy.add(observer);
+    }
+    public void removeObserver(IPositionChangeObserver observer)
+    {
+        obserwatorzy.remove(observer);
+    }
+    private void positionChanged(Vector2d old_p, Vector2d new_p)
+    {
+        for (IPositionChangeObserver x: obserwatorzy)
+            x.positionChanged(old_p, new_p);
     }
 }

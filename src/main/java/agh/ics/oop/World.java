@@ -15,5 +15,6 @@ public class World
         IEngine engine = new SimulationEngine(directions, map, positions);
         System.out.println(map);
         engine.run();
+        System.out.println(map);
     }
 }

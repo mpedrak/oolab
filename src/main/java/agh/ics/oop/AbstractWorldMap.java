@@ -1,10 +1,12 @@
 package agh.ics.oop;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver
 {
-    protected LinkedList<Animal> zwierzeta = new LinkedList<Animal>();
+    protected Map<Vector2d, Animal> zwierzeta = new HashMap<>();
     public String toString()
     {
         MapVisualizer rysownik = new MapVisualizer(this);
@@ -16,7 +18,7 @@ public abstract class AbstractWorldMap implements IWorldMap
     {
         if (canMoveTo(animal.getPosition()))
         {
-            zwierzeta.add(animal);
+            zwierzeta.put(animal.getPosition(), animal);
             return true;
         }
         return false;
@@ -30,11 +32,16 @@ public abstract class AbstractWorldMap implements IWorldMap
 
     public Object objectAt(Vector2d position)
     {
-        for (Animal x: zwierzeta)
-        {
-            if (x.isAt(position))
-                return x;
-        }
+        if(zwierzeta.get(position) != null)
+            return zwierzeta.get(position);
         return null;
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition)
+    {
+        Animal aa = zwierzeta.get(oldPosition);
+        zwierzeta.remove(oldPosition);
+        zwierzeta.put(newPosition, aa);
     }
 }

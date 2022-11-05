@@ -1,15 +1,12 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.sqrt;
 
 public class GrassField extends AbstractWorldMap
 {
-    private ArrayList<Grass> trawnik = new ArrayList<Grass>();
+    private Map<Vector2d, Grass> trawnik = new HashMap<>();
     private int n;
     public GrassField(int n)
     {
@@ -22,11 +19,11 @@ public class GrassField extends AbstractWorldMap
     {
         final int sqrt10n = (int)sqrt(10 * n);
         Vector2d bottomLeft = new Vector2d(sqrt10n, sqrt10n);
-        for (Animal x: zwierzeta)
+        for (Animal x: zwierzeta.values())
         {
             bottomLeft = bottomLeft.lowerLeft(x.getPosition());
         }
-        for (Grass x: trawnik)
+        for (Grass x: trawnik.values())
         {
             bottomLeft = bottomLeft.lowerLeft(x.getPosition());
         }
@@ -37,11 +34,11 @@ public class GrassField extends AbstractWorldMap
     protected Vector2d upperRight()
     {
         Vector2d upperRight = new Vector2d(0, 0);
-        for (Animal x: zwierzeta)
+        for (Animal x: zwierzeta.values())
         {
             upperRight = upperRight.upperRight(x.getPosition());
         }
-        for (Grass x: trawnik)
+        for (Grass x: trawnik.values())
         {
             upperRight = upperRight.upperRight(x.getPosition());
         }
@@ -54,9 +51,9 @@ public class GrassField extends AbstractWorldMap
             return true;
         if ((objectAt(position) instanceof Grass))  // do dodatkowego (zawsze kiedy canMoveTo zwroci true to zwierze sie poruszy)
         {
-            int i = hasGrass(position);
-            trawnik.remove(i);
-            trawnik.add(i, storzJednaTrawe(position));
+            trawnik.remove(position);
+            Grass tt = storzJednaTrawe(position);
+            trawnik.put(tt.getPosition(), tt);
             return true;
         }
         return false;
@@ -64,16 +61,10 @@ public class GrassField extends AbstractWorldMap
     @Override
     public Object objectAt(Vector2d position)
     {
-        for (Animal x: zwierzeta)
-        {
-            if (x.isAt(position))
-                return x;
-        }
-        for (Grass x: trawnik)
-        {
-            if (x.getPosition().equals(position))
-                return x;
-        }
+        if(zwierzeta.get(position) != null)
+            return zwierzeta.get(position);
+        if(trawnik.get(position) != null)
+            return trawnik.get(position);
         return null;
     }
     private void stworzTrawe()
@@ -87,7 +78,7 @@ public class GrassField extends AbstractWorldMap
             Vector2d pp = new Vector2d(generator.nextInt() % sqrt10n, generator.nextInt() % sqrt10n);
             if (pp.follows(zero0) && objectAt(pp) == null)
             {
-                trawnik.add(new Grass(pp));
+                trawnik.put(pp, new Grass(pp));
                 i++;
             }
         }
@@ -106,17 +97,7 @@ public class GrassField extends AbstractWorldMap
             }
         }
     }
-    private int hasGrass(Vector2d pos)
-    {
-        for (int i = 0; i < trawnik.size(); i++)
-        {
-            if (trawnik.get(i).getPosition().equals(pos))
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
+
     public int getAmountOfGrass()
     {
         return trawnik.size();
