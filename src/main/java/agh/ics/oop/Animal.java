@@ -80,7 +80,8 @@ public class Animal extends AbstractWorldMapElement
     }
     public void addObserver(IPositionChangeObserver observer)
     {
-        obserwatorzy.add(observer);
+        if (!obserwatorzy.contains(observer))
+            obserwatorzy.add(observer);
     }
     public void removeObserver(IPositionChangeObserver observer)
     {
