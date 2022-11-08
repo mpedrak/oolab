@@ -15,7 +15,7 @@ public class GrassField extends AbstractWorldMap
     }
 
     @Override
-    protected Vector2d bottomLeft()
+    public Vector2d bottomLeft()
     {
         final int sqrt10n = (int)sqrt(10 * n);
         Vector2d bottomLeft = new Vector2d(sqrt10n, sqrt10n);
@@ -31,7 +31,7 @@ public class GrassField extends AbstractWorldMap
     }
 
     @Override
-    protected Vector2d upperRight()
+    public Vector2d upperRight()
     {
         Vector2d upperRight = new Vector2d(0, 0);
         for (Animal x: zwierzeta.values())

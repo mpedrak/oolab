@@ -12,8 +12,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         MapVisualizer rysownik = new MapVisualizer(this);
         return rysownik.draw(bottomLeft(), upperRight());
     }
-    protected abstract Vector2d bottomLeft();
-    protected abstract Vector2d upperRight();
+    public abstract Vector2d bottomLeft();
+    public abstract Vector2d upperRight();
     public boolean place(Animal animal)
     {
         if (canMoveTo(animal.getPosition()))
@@ -21,7 +21,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             zwierzeta.put(animal.getPosition(), animal);
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("Cant place animal on position: " + animal.getPosition());
     }
     public boolean isOccupied(Vector2d position)
     {
