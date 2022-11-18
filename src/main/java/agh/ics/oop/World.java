@@ -9,12 +9,11 @@ public class World
 {
     public static void main(String[] args)
     {
-
-        Application.launch(App.class, args);
-        // z wyjatkami
-        /*
         try
         {
+            Application.launch(App.class, args);
+
+            /*
             System.out.println(Arrays.toString(args));
             MoveDirection[] directions = new OptionsParser().parse(args);
             IWorldMap map = new GrassField(10);
@@ -24,12 +23,13 @@ public class World
             System.out.println(map);
             engine.run();
             System.out.println(map);
+            */
+
         }
         catch (IllegalArgumentException ex)
         {
             System.out.println(ex);
         }
-        */
-
     }
+
 }

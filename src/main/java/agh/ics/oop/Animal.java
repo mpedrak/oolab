@@ -9,10 +9,13 @@ public class Animal extends AbstractWorldMapElement
     private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
     private IWorldMap map;
 
+
     public String toString()
     {
         return orientation.toShortString();
     }
+
+
 
     public Animal()
     {
@@ -57,20 +60,23 @@ public class Animal extends AbstractWorldMapElement
         if (map.canMoveTo(new_pos))
         {
             positionChanged(position, new_pos);
-            position = new_pos;
         }
     }
 
     public boolean equals(Object other)
     {
-        if (this == other)
-            return true;
+
+
         if (!(other instanceof Animal))
             return false;
         Animal that = (Animal) other;
+        if (this == that)
+            return true;
         if (this.position.equals(that.position) && this.orientation == that.orientation)
             return true;
         return false;
+
+
     }
 
     @Override

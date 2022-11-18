@@ -8,41 +8,42 @@ public class GrassField extends AbstractWorldMap
 {
     private Map<Vector2d, Grass> trawnik = new HashMap<>();
     private int n;
+
+    public MapBoundary mapB = new MapBoundary();
     public GrassField(int n)
     {
         this.n = n;
         stworzTrawe();
     }
 
+    public String toString()
+    {
+        MapVisualizer rysownik = new MapVisualizer(this);
+        return rysownik.draw(bottomLeft(), upperRight());
+    }
+
+    @Override
+    public boolean place(Animal animal)
+    {
+        if (canMoveTo(animal.getPosition()))
+        {
+            zwierzeta.put(animal.getPosition(), animal);
+            mapB.addElement(animal);
+            return true;
+        }
+        throw new IllegalArgumentException("Cant place animal on position: " + animal.getPosition());
+    }
+
     @Override
     public Vector2d bottomLeft()
     {
-        final int sqrt10n = (int)sqrt(10 * n);
-        Vector2d bottomLeft = new Vector2d(sqrt10n, sqrt10n);
-        for (Animal x: zwierzeta.values())
-        {
-            bottomLeft = bottomLeft.lowerLeft(x.getPosition());
-        }
-        for (Grass x: trawnik.values())
-        {
-            bottomLeft = bottomLeft.lowerLeft(x.getPosition());
-        }
-       return bottomLeft;
+        return mapB.bottomLeft();
     }
 
     @Override
     public Vector2d upperRight()
     {
-        Vector2d upperRight = new Vector2d(0, 0);
-        for (Animal x: zwierzeta.values())
-        {
-            upperRight = upperRight.upperRight(x.getPosition());
-        }
-        for (Grass x: trawnik.values())
-        {
-            upperRight = upperRight.upperRight(x.getPosition());
-        }
-        return upperRight;
+        return mapB.upperRight();
     }
     @Override
     public boolean canMoveTo(Vector2d position)
@@ -54,6 +55,7 @@ public class GrassField extends AbstractWorldMap
             trawnik.remove(position);
             Grass tt = storzJednaTrawe(position);
             trawnik.put(tt.getPosition(), tt);
+            mapB.positionChanged(position, tt.getPosition());
             return true;
         }
         return false;
@@ -78,7 +80,9 @@ public class GrassField extends AbstractWorldMap
             Vector2d pp = new Vector2d(generator.nextInt() % sqrt10n, generator.nextInt() % sqrt10n);
             if (pp.follows(zero0) && objectAt(pp) == null)
             {
-                trawnik.put(pp, new Grass(pp));
+                Grass g = new Grass(pp);
+                trawnik.put(pp, g);
+                mapB.addElement(g);
                 i++;
             }
         }

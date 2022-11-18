@@ -32,4 +32,13 @@ public class RectangularMap extends AbstractWorldMap
     {
         return new Vector2d(width - 1, height - 1);
     }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition)
+    {
+        Animal aa = zwierzeta.get(oldPosition);
+        aa.position = newPosition;
+        zwierzeta.remove(oldPosition);
+        zwierzeta.put(newPosition, aa);
+    }
 }
