@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -17,6 +18,8 @@ public class App extends Application
 
     public void start(Stage primaryStage)
     {
+
+        //f b r l f f r r f f f f f f f f r
 
         String[] args = getParameters().getRaw().toArray(new String[0]);
         MoveDirection[] directions = new OptionsParser().parse(args);
@@ -36,8 +39,8 @@ public class App extends Application
         grid.add(xy, 0, 0, 1, 1);
         GridPane.setHalignment(xy, HPos.CENTER);
 
-        int width = 20;
-        int height = 20;
+        int width = 40;
+        int height = 40;
 
         for (int i = 0; i <= upperRight.x - bottomLeft.x + 1; i++)
             grid.getColumnConstraints().add(new ColumnConstraints(width));
@@ -69,9 +72,17 @@ public class App extends Application
                 Object z = ((GrassField) map).objectAt(new Vector2d(x, y));
                 if (z != null)
                 {
-                    Label l = new Label(z.toString());
-                    grid.add(l, x - bottomLeft.x + 1, j, 1, 1);
-                    GridPane.setHalignment(l, HPos.CENTER);
+                    GuiElementBox element = null;
+                    try
+                    {
+                       element = new GuiElementBox((IMapElement)z);
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        System.out.println(ex);
+                    }
+                    grid.add(element.vbox, x - bottomLeft.x + 1, j, 1, 1);
+                    GridPane.setHalignment(element.vbox, HPos.CENTER);
                 }
                 ++j;
             }

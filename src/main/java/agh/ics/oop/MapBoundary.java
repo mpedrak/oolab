@@ -5,7 +5,7 @@ import java.util.*;
 public class MapBoundary implements IPositionChangeObserver
 {
 
-    private TreeSet< AbstractWorldMapElement> zbiorX = new TreeSet<>(new Comparator<AbstractWorldMapElement>()
+    public TreeSet< AbstractWorldMapElement> zbiorX = new TreeSet<>(new Comparator<AbstractWorldMapElement>()
     {
         public int compare (AbstractWorldMapElement a, AbstractWorldMapElement b)
         {
@@ -17,7 +17,7 @@ public class MapBoundary implements IPositionChangeObserver
         }
     }
     );
-    private TreeSet< AbstractWorldMapElement> zbiorY = new TreeSet<>(new Comparator<AbstractWorldMapElement>()
+    public TreeSet< AbstractWorldMapElement> zbiorY = new TreeSet<>(new Comparator<AbstractWorldMapElement>()
     {
         public int compare (AbstractWorldMapElement a, AbstractWorldMapElement b)
         {

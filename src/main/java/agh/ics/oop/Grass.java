@@ -33,4 +33,9 @@ public class Grass extends AbstractWorldMapElement
     {
         return Objects.hash(position);
     }
+
+    public String getPath()
+    {
+        return "src/main/resources/grass.png";
+    }
 }
