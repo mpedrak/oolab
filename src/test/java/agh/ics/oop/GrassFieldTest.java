@@ -16,7 +16,7 @@ public class GrassFieldTest
                 MoveDirection.FORWARD, MoveDirection.FORWARD}; // parser ma swoj test
         IWorldMap map = new GrassField(10);
         Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
-        IEngine engine = new SimulationEngine(directions, map, positions);
+        Runnable engine = new SimulationEngine(directions, map, positions);
 
         assertTrue(((GrassField)map).getAmountOfGrass() == 10);
 
@@ -51,7 +51,7 @@ public class GrassFieldTest
         Vector2d[] positions = { new Vector2d(2,2), new Vector2d(2,2) };
         try
         {
-            IEngine engine = new SimulationEngine(directions, map, positions);
+            Runnable engine = new SimulationEngine(directions, map, positions);
             engine.run();
         }
         catch(IllegalArgumentException ex)

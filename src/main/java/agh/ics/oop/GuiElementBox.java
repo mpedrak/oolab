@@ -15,22 +15,31 @@ public class GuiElementBox
 
     public GuiElementBox(IMapElement element) throws FileNotFoundException
     {
-        Image image = new Image(new FileInputStream(element.getPath()));
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(20);
-        imageView.setFitWidth(20);
-        if(element instanceof Animal)
+        if (element == null)
         {
-            Label label = new Label(element.getPosition().toString());
-            vbox.getChildren().addAll(imageView, label);
+            Label label = new Label("");
+            vbox.getChildren().addAll(label);
         }
         else
         {
-            imageView.setFitHeight(25);
-            imageView.setFitWidth(25);
-            vbox.getChildren().addAll(imageView);
+            Image image = new Image(new FileInputStream(element.getPath()));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(20);
+            imageView.setFitWidth(20);
+            if(element instanceof Animal)
+            {
+                Label label = new Label(element.getPosition().toString());
+                vbox.getChildren().addAll(imageView, label);
+            }
+            else
+            {
+                imageView.setFitHeight(25);
+                imageView.setFitWidth(25);
+                vbox.getChildren().addAll(imageView);
+            }
+            vbox.setAlignment(Pos.CENTER);
         }
-        vbox.setAlignment(Pos.CENTER);
+
 
     }
 }

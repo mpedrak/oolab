@@ -16,7 +16,7 @@ public class RectangularMapTest
                 MoveDirection.FORWARD, MoveDirection.FORWARD}; // parser ma swoj test
         IWorldMap map = new RectangularMap(10, 5);
         Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
-        IEngine engine = new SimulationEngine(directions, map, positions);
+        Runnable engine = new SimulationEngine(directions, map, positions);
 
         assertTrue(map.isOccupied(new Vector2d(2,2)));
         assertTrue(map.isOccupied(new Vector2d(3,4)));
@@ -47,7 +47,7 @@ public class RectangularMapTest
         Vector2d[] positions = { new Vector2d(2,2), new Vector2d(2,2) };
         try
         {
-            IEngine engine = new SimulationEngine(directions, map, positions);
+            Runnable engine = new SimulationEngine(directions, map, positions);
             engine.run();
         }
         catch(IllegalArgumentException ex)

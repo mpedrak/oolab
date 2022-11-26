@@ -1,29 +1,60 @@
 package agh.ics.oop;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+import javax.swing.plaf.TableHeaderUI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class SimulationEngine implements IEngine, Runnable
+public class SimulationEngine implements  Runnable // (ThreadedSimulationEngine)
 {
     IWorldMap mapa;
     MoveDirection[] ruchy;
 
     private ArrayList<Animal> zwierzeta = new ArrayList<Animal>();
 
-    public SimulationEngine(MoveDirection[] ruchy, IWorldMap mapa, Vector2d[] pozycje)
+    private App app = null;
+
+    private int mD;
+
+    public SimulationEngine(MoveDirection[] ruchy, IWorldMap mapa, Vector2d[] pozycje, App app, int mD)
     {
         this.mapa = mapa;
         this.ruchy = ruchy;
+        this.app = app;
+        this.mD = mD;
         for (Vector2d x: pozycje)
         {
             Animal z = new Animal(mapa, x);
-            z.addObserver((IPositionChangeObserver) mapa);
-            if(mapa instanceof GrassField)
-                z.addObserver((IPositionChangeObserver) (((GrassField) mapa).mapB));
             if(mapa.place(z))
                 zwierzeta.add(z);
         }
     }
+    public SimulationEngine(IWorldMap mapa, Vector2d[] pozycje, App app, int mD)
+    {
+        this.mapa = mapa;
+        this.app = app;
+        this.mD = mD;
+        for (Vector2d x: pozycje)
+        {
+            Animal z = new Animal(mapa, x);
+            if(mapa.place(z))
+                zwierzeta.add(z);
+        }
+    }
+
+    public void setDirections(MoveDirection[] ruchy)
+    {
+        this.ruchy = ruchy;
+    }
+    public void setMoveDelay(int md)
+    {
+        this.mD = md;
+    }
+
 
     /**
      * Move the animal on the map according to the provided move directions. Every
@@ -37,16 +68,26 @@ public class SimulationEngine implements IEngine, Runnable
         {
             Animal zwierz = zwierzeta.get(i);
             zwierz.move(x);
-
-            /*
-            System.out.println(i + ", " + x);
-            System.out.println(mapa);
-            System.out.println("Ilosc trawy: " + ((GrassField)mapa).getAmountOfGrass());
-            */
-
+            try
+            {
+                Thread.sleep(mD);
+            }
+            catch (InterruptedException ex)
+            {
+                System.out.println(ex + " przerwanie symulacji");
+            }
+            Platform.runLater(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    app.renderuj(mapa);
+                }
+            });
             i++;
             if (i == zwierzeta.size())
                 i = 0;
         }
     }
+
 }

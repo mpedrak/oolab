@@ -29,6 +29,8 @@ public class GrassField extends AbstractWorldMap
         {
             zwierzeta.put(animal.getPosition(), animal);
             mapB.addElement(animal);
+            animal.addObserver(mapB);
+            animal.addObserver(this);
             return true;
         }
         throw new IllegalArgumentException("Cant place animal on position: " + animal.getPosition());

@@ -1,0 +1,6 @@
+
+.cell {
+
+    -fx-background-color: lightgrey, lightgrey ;
+    -fx-background-insets: 0, 0 0 1 1 ;
+}
